@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>local storage practising</title>
+</head>
+<body>
+    <div id="obj">
+        <input type="text" name="" placeholder="product obj" id="product-obj">
+        <input type="text" name="" id="quantity-obj" placeholder="quantity Obj">
+        <button onclick=" addObjToLocalStorage ()" id="add-obj">Add Obj</button>
+        <button onclick="removeObj()">Remove Obj</button>
+    </div>
+
+    <div id="container">
+        <ul id="array-li-container">
+
+        </ul>
+    </div>
+    <div >
+        <input type="text" name="" placeholder="product Array" id="product-array">
+        <input type="text" name="" id="quantity-array" placeholder="quantity Array">
+        <button onclick="addArayToLocalStorage()" >Add Array</button>
+        <button onclick="">Remove Array</button>
+    </div>
+
+    <div id="container">
+        <ul id="obj-li-container">
+
+        </ul>
+    </div>
+
+    <script>
+        const getElement = id =>{
+            const element = document.getElementById(id);
+            return element;
+        }
+//   save obj in a local storage 
+        const addObjToLocalStorage = () =>{
+            const productObj = getElement('product-obj').value;
+            const quantityObj = getElement('quantity-obj').value;
+            console.log(productObj,quantityObj);
+
+            const products = JSON.parse(localStorage.getItem('products'));
+            let finalProducts = {};
+            if(products){
+                finalProducts = (products);
+            }
+            
+                finalProducts[productObj] = quantityObj;
+            
+
+            localStorage.setItem('products', JSON.stringify(finalProducts));
+            displayObj();
+            
+        }
+        // display obj to ui 
+        const displayObj = () =>{
+            const objLIContainer = getElement('obj-li-container');
+            objLIContainer.textContent = '';
+            const products = JSON.parse(localStorage.getItem('products'))
+          for(const product in products ){
+              console.log(product);
+             const li = document.createElement('li');
+             li.innerText = ` ${product} : ${products[product]}`
+             objLIContainer.appendChild(li);
+              
+          }
+        }
+        displayObj();
+
+        const removeObj = () =>{
+            localStorage.removeItem('products');
+            displayObj();
+        }
+
+
+        //  add array in local Storage 
+        const addArayToLocalStorage  = () =>{
+            const productArray = getElement('product-array').value;
+            const quantityArray = getElement('quantity-array').value; 
+
+            const savedArray = JSON.parse(localStorage.getItem('productsArray'));
+            if(savedArray){
+                const todolist = [...savedArray,
+            {
+                name:productArray,
+                quantity:quantityArray,
+                isComplete:false
+            }
+        ]
+        localStorage.setItem('productsArray', JSON.stringify(todolist));
+        }
+        else{
+            const todolist = [
+                {name:productArray,
+                quantity:quantityArray,
+                isComplete: false
+            }
+            ]
+            localStorage.setItem('productsArray', JSON.stringify(todolist));
+        }
+        }
+
+    </script>
+</body>
+</html>
